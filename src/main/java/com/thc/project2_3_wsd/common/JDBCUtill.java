@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class JDBCUtill {
 
-    public static Connection con = null;
 
     public static Connection getConnection() {
+        Connection con = null;
         if (con == null) {
             try {
                 Class.forName("org.mariadb.jdbc.Driver");
