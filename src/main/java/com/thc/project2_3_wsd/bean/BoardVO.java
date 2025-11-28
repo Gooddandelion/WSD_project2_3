@@ -9,17 +9,28 @@ public class BoardVO {
     private String password;
     private String category;
     private String content;
+    private String photo;
     private Date regdate;
     private int cnt;
 
-    public BoardVO() {}
+    public BoardVO() {
+    }
 
-    public BoardVO(String title , String writer , String content, String password, String category) {
+    public BoardVO(String title , String writer , String content , String password , String category , String photo) {
         this.title = title;
         this.writer = writer;
         this.password = password;
         this.category = category;
         this.content = content;
+        this.photo = photo;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public int getSeq() {
