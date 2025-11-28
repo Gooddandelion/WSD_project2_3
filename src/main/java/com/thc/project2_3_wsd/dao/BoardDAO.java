@@ -21,9 +21,8 @@ public class BoardDAO {
     private final String BOARD_DELETE = "delete from BOARD where seq = ?";
     private final String BOARD_SELECT = "select * from BOARD where seq = ? order by regdate desc";
     private final String BOARD_UPDATE = "update BOARD set title = ?, writer = ?, category = ?, content = ? where seq = ?";
-    //private final String BOARD_SEARCH = "select * from BOARD where title like = ? order by regdate desc";
-
-
+    private final String BOARD_SEARCH = "select * from BOARD where title like = ? order by regdate desc";
+    private final String BOARD_PHOTONAME = "select photo from BOARD where seq = ?";
 
     public int insertBoard(BoardVO vo) {
         try {
@@ -117,8 +116,6 @@ public class BoardDAO {
         }
     }
 
-    private final String BOARD_SEARCH = "select * from BOARD where title like ? order by regdate desc";
-
     public List<BoardVO> searchBoard(String title) {
         List<BoardVO> list = new ArrayList<>();
         try {
@@ -144,4 +141,20 @@ public class BoardDAO {
         }
     }
 
+    public String getFileName(int seq) {
+        try {
+            con = JDBCUtill.getConnection();
+            pstmt = con.prepareStatement(BOARD_PHOTONAME);
+
+            pstmt.setInt(1, seq);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("photo");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }
