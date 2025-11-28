@@ -11,7 +11,7 @@
 <div class="container mt-5" style="max-width: 800px;">
     <h2 class="text-center mb-4">새 글 작성</h2>
 
-    <form action="write_ok.jsp" method="post">
+    <form action="write_ok.jsp" method="post" enctype="multipart/form-data">
 
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
@@ -35,6 +35,11 @@
                 <option value="자유">자유</option>
                 <option value="질문">질문</option>
             </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="photo" class="form-label">사진</label>
+            <input type="file" class="form-control" id="photo" name="photo">
         </div>
 
         <div class="mb-3">
