@@ -16,36 +16,42 @@ public class FileUpload {
         String realPath = request.getServletContext().getRealPath("upload");
 
         File dir = new File(realPath);
-        if (!dir.exists()) dir.mkdirs();
-
+        if (!dir.exists()) dir.mkdir();
 
         BoardVO one = null;
         MultipartRequest multpartRequest = null;
         try {
             multpartRequest = new MultipartRequest(request, realPath,
                     sizeLimit, "utf-8",new DefaultFileRenamePolicy());
+
             String filename = multpartRequest.getFilesystemName("photo");
 
             one = new BoardVO();
-            String seq = multpartRequest.getParameter("seq");
-            if(seq != null && seq.equals("")) one.setSeq(Integer.parseInt(seq));
-            one.setTitle(multpartRequest.getParameter("title"));
-            one.setWriter(multpartRequest.getParameter("writer"));
-            one.setCategory(multpartRequest.getParameter("category"));
-            one.setContent(multpartRequest.getParameter("content"));
-            one.setCnt(Integer.parseInt(multpartRequest.getParameter("cnt")));
 
-            if(seq!=null && seq.equals("")) {
-                BoardDAO boardDAO = new BoardDAO();
-                String oldfile = boardDAO.getFileName(Integer.parseInt(seq));
-
-                if(filename != null && oldfile != null) {
-                    FileUpload.deleteFile(request, oldfile);
-                }
-                else if(filename == null && oldfile != null) {
-                    filename = oldfile;
+            String seqStr = multpartRequest.getParameter("seq");
+            if (seqStr != null && !seqStr.trim().isEmpty()) {
+                try {
+                    one.setSeq(Integer.parseInt(seqStr));
+                } catch (NumberFormatException e) {
                 }
             }
+
+            String cntStr = multpartRequest.getParameter("cnt");
+            if (cntStr != null && !cntStr.trim().isEmpty()) {
+                try {
+                    one.setCnt(Integer.parseInt(cntStr));
+                } catch (NumberFormatException e) {
+                    one.setCnt(0);
+                }
+            } else {
+                one.setCnt(0);
+            }
+
+            one.setTitle(multpartRequest.getParameter("title"));
+            one.setWriter(multpartRequest.getParameter("writer"));
+            one.setPassword(multpartRequest.getParameter("password"));
+            one.setCategory(multpartRequest.getParameter("category"));
+            one.setContent(multpartRequest.getParameter("content"));
             one.setPhoto(filename);
 
         } catch (IOException e) {
