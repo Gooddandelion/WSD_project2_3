@@ -16,11 +16,11 @@ public class BoardDAO {
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
-    private final String BOARD_INSERT = "insert into BOARD(title, writer, password, category, content) values(?,?,?,?,?)";
+    private final String BOARD_INSERT = "insert into BOARD(title, writer, password, category, content, photo) values(?,?,?,?,?,?)";
     private final String BOARD_LIST = "select * from BOARD order by regdate desc";
     private final String BOARD_DELETE = "delete from BOARD where seq = ?";
     private final String BOARD_SELECT = "select * from BOARD where seq = ? order by regdate desc";
-    private final String BOARD_UPDATE = "update BOARD set title = ?, writer = ?, category = ?, content = ? where seq = ?";
+    private final String BOARD_UPDATE = "update BOARD set title = ?, writer = ?, category = ?, content = ?, photo = ? where seq = ?";
     private final String BOARD_SEARCH = "select * from BOARD where title like = ? order by regdate desc";
     private final String BOARD_PHOTONAME = "select photo from BOARD where seq = ?";
 
@@ -33,6 +33,7 @@ public class BoardDAO {
             pstmt.setString(3, vo.getPassword());
             pstmt.setString(4, vo.getCategory());
             pstmt.setString(5, vo.getContent());
+            pstmt.setString(6, vo.getPhoto());
             pstmt.executeUpdate();
             return 1;
         } catch (SQLException e) {
@@ -109,6 +110,7 @@ public class BoardDAO {
             pstmt.setString(3, vo.getCategory());
             pstmt.setString(4, vo.getContent());
             pstmt.setInt(5, vo.getSeq());
+            pstmt.setString(6, vo.getPhoto());
             pstmt.executeUpdate();
             return 1;
         } catch (SQLException e) {
