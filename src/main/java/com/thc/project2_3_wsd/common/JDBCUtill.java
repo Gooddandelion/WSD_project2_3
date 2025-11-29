@@ -1,8 +1,6 @@
 package com.thc.project2_3_wsd.common;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class JDBCUtill {
 

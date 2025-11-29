@@ -1,22 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.thc.project2_3_wsd.dao.BoardDAO" %>
 <%@ page import="com.thc.project2_3_wsd.bean.BoardVO" %>
+<%@ page import="com.thc.project2_3_wsd.common.FileUpload" %>
 
 <% request.setCharacterEncoding("UTF-8"); %>
 
-<jsp:useBean id="u" class="com.thc.project2_3_wsd.bean.BoardVO"/>
-<jsp:setProperty name="u" property="*"/>
-<jsp:setProperty name="u" property="seq" param="id"/>
-
-
 <%
     BoardDAO boardDAO = new BoardDAO();
-    BoardVO boardVO = new BoardVO();
+    FileUpload fileUpload = new FileUpload();
+
+    BoardVO u = fileUpload.uploadFile(request);
+
+    int seq= u.getSeq();
+
     int i = boardDAO.updateBoard(u);
     String message = "edit: success";
     if(i!=1) message = "edit: fail";
 %>
 <script>
     alert('<%=message%>');
-    location.href='view.jsp?id=<%=u.getSeq()%>';
+    location.href='view.jsp?id=<%=seq%>';
 </script>

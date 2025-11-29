@@ -16,14 +16,13 @@ public class BoardDAO {
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
-    private final String BOARD_INSERT = "insert into BOARD(title, writer, password, category, content) values(?,?,?,?,?)";
+    private final String BOARD_INSERT = "insert into BOARD(title, writer, password, category, content, photo) values(?,?,?,?,?,?)";
     private final String BOARD_LIST = "select * from BOARD order by regdate desc";
     private final String BOARD_DELETE = "delete from BOARD where seq = ?";
-    private final String BOARD_SELECT = "select * from BOARD where seq = ? order by regdate desc";
-    private final String BOARD_UPDATE = "update BOARD set title = ?, writer = ?, category = ?, content = ? where seq = ?";
-    //private final String BOARD_SEARCH = "select * from BOARD where title like = ? order by regdate desc";
-
-
+    private final String BOARD_SELECT = "select * from BOARD where seq = ? ";
+    private final String BOARD_UPDATE = "update BOARD set title = ?, writer = ?, category = ?, content = ?, photo = ? where seq = ?";
+    private final String BOARD_SEARCH = "select * from BOARD where title like = ? order by regdate desc";
+    private final String BOARD_PHOTONAME = "select photo from BOARD where seq = ?";
 
     public int insertBoard(BoardVO vo) {
         try {
@@ -34,6 +33,7 @@ public class BoardDAO {
             pstmt.setString(3, vo.getPassword());
             pstmt.setString(4, vo.getCategory());
             pstmt.setString(5, vo.getContent());
+            pstmt.setString(6, vo.getPhoto());
             pstmt.executeUpdate();
             return 1;
         } catch (SQLException e) {
@@ -57,6 +57,7 @@ public class BoardDAO {
                 vo.setContent(rs.getString("content"));
                 vo.setRegdate(rs.getDate("regdate"));
                 vo.setCnt(rs.getInt("cnt"));
+                vo.setPhoto(rs.getString("photo"));
                 list.add(vo);
             }
             return list;
@@ -77,14 +78,15 @@ public class BoardDAO {
     }
 
     public BoardVO getBoard(int seq) {
+        BoardVO vo = null;
         try {
             con = JDBCUtill.getConnection();
             pstmt = con.prepareStatement(BOARD_SELECT);
-
             pstmt.setInt(1, seq);
             rs = pstmt.executeQuery();
+
             if (rs.next()) {
-                BoardVO vo = new BoardVO();
+                vo = new BoardVO();
                 vo.setSeq(rs.getInt("seq"));
                 vo.setTitle(rs.getString("title"));
                 vo.setWriter(rs.getString("writer"));
@@ -92,12 +94,12 @@ public class BoardDAO {
                 vo.setContent(rs.getString("content"));
                 vo.setRegdate(rs.getDate("regdate"));
                 vo.setCnt(rs.getInt("cnt"));
-                return vo;
+                vo.setPhoto(rs.getString("photo"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return vo;
     }
 
     public int updateBoard(BoardVO vo) {
@@ -109,15 +111,15 @@ public class BoardDAO {
             pstmt.setString(2, vo.getWriter());
             pstmt.setString(3, vo.getCategory());
             pstmt.setString(4, vo.getContent());
-            pstmt.setInt(5, vo.getSeq());
+            pstmt.setString(5, vo.getPhoto());
+            pstmt.setInt(6, vo.getSeq());
+
             pstmt.executeUpdate();
             return 1;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
-    private final String BOARD_SEARCH = "select * from BOARD where title like ? order by regdate desc";
 
     public List<BoardVO> searchBoard(String title) {
         List<BoardVO> list = new ArrayList<>();
@@ -144,4 +146,20 @@ public class BoardDAO {
         }
     }
 
+    public String getFileName(int seq) {
+        try {
+            con = JDBCUtill.getConnection();
+            pstmt = con.prepareStatement(BOARD_PHOTONAME);
+
+            pstmt.setInt(1, seq);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("photo");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }

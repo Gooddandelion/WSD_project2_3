@@ -1,12 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.thc.project2_2_wsd.dao.BoardDAO" %>
+<%@ page import="com.thc.project2_3_wsd.dao.BoardDAO" %>
+<%@ page import="com.thc.project2_3_wsd.common.FileUpload" %>
+<%@ page import="com.thc.project2_3_wsd.bean.BoardVO" %>
 <% request.setCharacterEncoding("UTF-8"); %>
-
-<jsp:useBean id="u" class="com.thc.project2_2_wsd.bean.BoardVO"/>
-<jsp:setProperty name="u" property="*"/>
 
 <%
   BoardDAO boardDAO = new BoardDAO();
+  FileUpload upload = new FileUpload();
+  BoardVO u = upload.uploadFile(request);
+
   int i = boardDAO.insertBoard(u);
   String message = "insert: success";
   if(i!=1) message = "insert: fail";
