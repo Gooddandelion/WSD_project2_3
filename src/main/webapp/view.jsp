@@ -2,14 +2,19 @@
 <%@ page import="com.thc.project2_3_wsd.dao.BoardDAO" %>
 <%@ page import="com.thc.project2_3_wsd.bean.BoardVO" %>
 
-<jsp:useBean id="u" class="com.thc.project2_3_wsd.bean.BoardVO"/>
-<jsp:setProperty name="u" property="seq" param="id"/>
 
 <%
-    BoardDAO boardDAO = new BoardDAO();
-    BoardVO boardVO = new BoardVO();
-    boardVO = boardDAO.getBoard(u.getSeq());
+    String idParam = request.getParameter("id");
+    int seq = 0;
 
+    if(idParam != null){
+        seq = Integer.parseInt(idParam);
+    }
+
+    BoardDAO boardDAO = new BoardDAO();
+    BoardVO boardVO = boardDAO.getBoard(seq);
+
+    String uploadPath = "/upload/";
 %>
 <html>
 <head>
@@ -30,6 +35,23 @@
             </div>
         </div>
         <div class="card-body">
+
+            <h5 class="mt-4 mb-3">첨부 파일</h5>
+            <% if (boardVO.getPhoto() != null && !boardVO.getPhoto().isEmpty()) { %>
+            <div class="mb-4 text-center">
+                <p>파일명: <strong><%= boardVO.getPhoto() %></strong></p>
+                <img src="<%= request.getContextPath() + uploadPath + boardVO.getPhoto() %>"
+                     alt="<%= boardVO.getPhoto() %> 파일"
+                     class="img-fluid rounded"
+                     style="max-height: 400px; border: 1px solid #ddd;">
+            </div>
+            <% } else { %>
+            <p class="text-muted">첨부된 파일 없음</p>
+            <% } %>
+
+            <hr>
+
+            <h5 class="mt-4 mb-3">내용</h5>
             <p style="white-space: pre-wrap;"><%= boardVO.getContent() %></p>
         </div>
     </div>
