@@ -23,6 +23,7 @@ public class BoardDAO {
     private final String BOARD_UPDATE = "update BOARD set title = ?, writer = ?, category = ?, content = ?, photo = ? where seq = ?";
     private final String BOARD_SEARCH = "select * from BOARD where title like ? order by ";
     private final String BOARD_PHOTONAME = "select photo from BOARD where seq = ?";
+    private final String BOARD_COUNT = "update BOARD set cnt = cnt+1 where seq = ?";
 
 
     public int insertBoard(BoardVO vo) {
@@ -166,5 +167,17 @@ public class BoardDAO {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public void CountBoard(int seq) {
+        try {
+            con = JDBCUtill.getConnection();
+            pstmt = con.prepareStatement(BOARD_COUNT);
+
+            pstmt.setInt(1, seq);
+            rs = pstmt.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

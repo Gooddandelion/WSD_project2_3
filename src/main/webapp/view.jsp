@@ -13,6 +13,7 @@
 
     BoardDAO boardDAO = new BoardDAO();
     BoardVO boardVO = boardDAO.getBoard(seq);
+    boardDAO.CountBoard(seq);
 
     String uploadPath = "/upload/";
 %>
