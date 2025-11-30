@@ -19,7 +19,6 @@
         sortOrder = "DESC";
     }
 
-    // 3. DAO 호출 수정
     if (keyword != null && !keyword.trim().isEmpty()) {
         list = boardDAO.searchBoard(keyword , sortColumn , sortOrder);
     } else {
@@ -28,13 +27,18 @@
 
     request.setAttribute("list" , list);
 
+    String currentParams = "";
+    if (keyword != null && !keyword.trim().isEmpty()) {
+        currentParams = "&searchKeyword=" + keyword;
+    }
+    request.setAttribute("currentParams", currentParams);
     request.setAttribute("currentSortColumn" , sortColumn);
     request.setAttribute("currentSortOrder" , sortOrder);
 %>
 <head>
     <title>게시판 목록</title>
 </head>
-<body>
+        <body>
 <jsp:include page="header.jsp"/>
 <div class="container mt-5">
     <h2 class="text-center mb-4">JSP 게시판</h2>
@@ -58,34 +62,14 @@
             <th>글번호</th>
 
             <th>
-                <a href="list.jsp?sortColumn=title&sortOrder=
-                    <c:choose>
-                        <%-- 1. 현재 이 컬럼(title)이고, 현재 순서가 ASC라면, 다음은 DESC 요청 --%>
-                        <c:when test="${currentSortColumn eq 'title' and currentSortOrder eq 'ASC'}">DESC</c:when>
-                        <%-- 2. 현재 이 컬럼(title)이고, 현재 순서가 DESC라면, 다음은 ASC 요청 --%>
-                        <c:when test="${currentSortColumn eq 'title' and currentSortOrder eq 'DESC'}">ASC</c:when>
-                        <%-- 3. 다른 컬럼이 정렬 중이거나(초기 상태), 그 외 모든 경우: ASC 요청 --%>
-                        <c:otherwise>ASC</c:otherwise>
-                    </c:choose>
-                    <c:if test="${not empty param.searchKeyword}">&searchKeyword=${param.searchKeyword}</c:if>
-                    " class="text-decoration-none text-dark"> 제목
+                <a href="list.jsp?sortColumn=title&sortOrder=<c:choose><c:when test="${currentSortColumn eq 'title' and currentSortOrder eq 'ASC'}">DESC</c:when><c:when test="${currentSortColumn eq 'title' and currentSortOrder eq 'DESC'}">ASC</c:when><c:otherwise>ASC</c:otherwise></c:choose>${currentParams}" class="text-decoration-none text-dark"> 제목
                 </a>
             </th>
 
             <th>작성자</th>
 
             <th>
-                <a href="list.jsp?sortColumn=regdate&sortOrder=
-                    <c:choose>
-                        <%-- 1. 현재 이 컬럼(regdate)이고, 현재 순서가 ASC라면, 다음은 DESC 요청 --%>
-                        <c:when test="${currentSortColumn eq 'regdate' and currentSortOrder eq 'ASC'}">DESC</c:when>
-                        <%-- 2. 현재 이 컬럼(regdate)이고, 현재 순서가 DESC라면, 다음은 ASC 요청 --%>
-                        <c:when test="${currentSortColumn eq 'regdate' and currentSortOrder eq 'DESC'}">ASC</c:when>
-                        <%-- 3. 다른 컬럼이 정렬 중이거나(초기 상태), 그 외 모든 경우: ASC 요청 --%>
-                        <c:otherwise>ASC</c:otherwise>
-                    </c:choose>
-                    <c:if test="${not empty param.searchKeyword}">&searchKeyword=${param.searchKeyword}</c:if>
-                    " class="text-decoration-none text-dark"> 등록일자
+                <a href="list.jsp?sortColumn=regdate&sortOrder=<c:choose><c:when test="${currentSortColumn eq 'regdate' and currentSortOrder eq 'ASC'}">DESC</c:when><c:when test="${currentSortColumn eq 'regdate' and currentSortOrder eq 'DESC'}">ASC</c:when><c:otherwise>DESC</c:otherwise></c:choose>${currentParams}" class="text-decoration-none text-dark"> 등록일자
                 </a>
             </th>
             <th>조회수</th>
