@@ -9,6 +9,7 @@
     List<BoardVO> list = boardDAO.getBoardList();
     String keyword = request.getParameter("searchKeyword");
 
+    // Search 기능 구현
     if (keyword != null && !keyword.trim().isEmpty()) {
         list = boardDAO.searchBoard(keyword);
     } else {
