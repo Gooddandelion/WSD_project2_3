@@ -21,7 +21,7 @@ public class BoardDAO {
     private final String BOARD_DELETE = "delete from BOARD where seq = ?";
     private final String BOARD_SELECT = "select * from BOARD where seq = ? ";
     private final String BOARD_UPDATE = "update BOARD set title = ?, writer = ?, category = ?, content = ?, photo = ? where seq = ?";
-    private final String BOARD_SEARCH = "select * from BOARD where title like = ? order by regdate desc";
+    private final String BOARD_SEARCH = "select * from BOARD where title like ? order by regdate desc";
     private final String BOARD_PHOTONAME = "select photo from BOARD where seq = ?";
 
     public int insertBoard(BoardVO vo) {
