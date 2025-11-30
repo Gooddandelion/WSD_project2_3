@@ -17,12 +17,13 @@ public class BoardDAO {
     ResultSet rs = null;
 
     private final String BOARD_INSERT = "insert into BOARD(title, writer, password, category, content, photo) values(?,?,?,?,?,?)";
-    private final String BOARD_LIST = "select * from BOARD order by regdate desc";
+    private final String BOARD_LIST = "select * from BOARD order by ";
     private final String BOARD_DELETE = "delete from BOARD where seq = ?";
     private final String BOARD_SELECT = "select * from BOARD where seq = ? ";
     private final String BOARD_UPDATE = "update BOARD set title = ?, writer = ?, category = ?, content = ?, photo = ? where seq = ?";
-    private final String BOARD_SEARCH = "select * from BOARD where title like ? order by regdate desc";
+    private final String BOARD_SEARCH = "select * from BOARD where title like ? order by ";
     private final String BOARD_PHOTONAME = "select photo from BOARD where seq = ?";
+
 
     public int insertBoard(BoardVO vo) {
         try {
@@ -41,11 +42,13 @@ public class BoardDAO {
         }
     }
 
-    public List<BoardVO> getBoardList() {
+    public List<BoardVO> getBoardList(String sortColumn, String sortOrder) {
         List<BoardVO> list = new ArrayList<>();
+
+        String list_sql = BOARD_LIST + sortColumn + " " + sortOrder;
         try {
             con = JDBCUtill.getConnection();
-            pstmt = con.prepareStatement(BOARD_LIST);
+            pstmt = con.prepareStatement(list_sql);
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -121,11 +124,13 @@ public class BoardDAO {
         }
     }
 
-    public List<BoardVO> searchBoard(String title) {
+    public List<BoardVO> searchBoard(String title, String sortColumn, String sortOrder) {
         List<BoardVO> list = new ArrayList<>();
+
+        String search_sql = BOARD_SEARCH + sortColumn + " " + sortOrder;
         try {
             con = JDBCUtill.getConnection();
-            pstmt = con.prepareStatement(BOARD_SEARCH);
+            pstmt = con.prepareStatement(search_sql);
 
             pstmt.setString(1, "%" + title + "%");
             rs = pstmt.executeQuery();
